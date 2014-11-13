@@ -17,6 +17,21 @@ public class Ship : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if(HP<=0)
+			Die();
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+		if (coll.gameObject.tag == "AllyProjectile")
+		{
+			AllyProjectile pa = coll.gameObject.GetComponent<AllyProjectile>();
+			HP -= pa.GetDamage();
+			coll.gameObject.SendMessage("Die");
+		}
+	}
+
+	void Die()
+	{
+		Destroy(gameObject);
 	}
 }

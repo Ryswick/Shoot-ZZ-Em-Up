@@ -10,9 +10,10 @@ public class Player : Ship {
 	private float upgradeRatio;
 	private Bombe bombe;
 	private List<Bonus> bonusList;
-	public Projectile projectile;
+	public AllyProjectile projectile;
 	private bool isShooting;
 	private bool isDead;
+	private List<Transform> shootPositions;
 
 	void Start ()
 	{
@@ -23,6 +24,11 @@ public class Player : Ship {
 		isDead = false;
 
 		bonusList = new List<Bonus>();
+		shootPositions = new List<Transform>();
+
+		//Storage of all the canons positions on the ship
+		for(int i = 0; i < transform.childCount; i++)
+			shootPositions.Add(transform.GetChild(i));
 
 		Live();
 	}
@@ -70,15 +76,6 @@ public class Player : Ship {
 		transform.position = pos;
 	}
 
-	void Death()
-	{
-		isDead = true;
-		isShooting = false;
-		nbLife--;
-
-		// Game Over if nbLife < 0
-	}
-
 	//Initialize the player data each time he comes back to life
 	void Live()
 	{
@@ -99,15 +96,40 @@ public class Player : Ship {
 		gameObject.transform.position = new Vector3(-wrld.x/3 + halfxSize, -wrld.y/2, 0);
 
 		isDead = false;
+
+		gameObject.SetActive(true);
+	}
+
+	//Gestion of the player afterlife
+	void Die()
+	{
+		isDead = true;
+		isShooting = false;
+		nbLife--;
+		gameObject.SetActive(false);
+
+		if(nbLife > 0)
+			Live ();
+		
+		// Game Over if nbLife < 0
 	}
 
 	IEnumerator Shoot(float shootSpeed)
 	{
 		while(isShooting)
 		{
-			Instantiate(projectile, gameObject.rigidbody2D.position, new Quaternion());
+			//Instantiate a projectile on each canon position
+			foreach(Transform t in shootPositions)
+				Instantiate(projectile, t.position, new Quaternion());
 
 			yield return new WaitForSeconds(shootSpeed);
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+		if (coll.gameObject.tag == "Enemy")
+		{
+			Die ();
 		}
 	}
 }

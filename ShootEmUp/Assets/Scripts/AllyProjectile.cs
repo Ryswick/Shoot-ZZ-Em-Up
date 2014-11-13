@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour {
+public class AllyProjectile : MonoBehaviour {
 
 	public int speed;
 	private float lifetime;
@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour {
 	void OnEnable () {
 		rigidbody2D.velocity = Vector3.up * speed;
 		lifetime = 1;
+		damage = 1;
 		Invoke ("Die", lifetime);
 	}
 
@@ -19,7 +20,7 @@ public class Projectile : MonoBehaviour {
 
 	void Die()
 	{
-		DestroyImmediate(gameObject);
+		Destroy(gameObject);
 	}
 
 	public int GetDamage()
