@@ -6,6 +6,7 @@ public class Ship : MonoBehaviour {
 	public int HP;
 	public float speed;
 	public float shootSpeed;
+	public int score;
 	protected Sprite skin;
 	public int orbDropped;
 	private bool holdBonus;
@@ -32,6 +33,7 @@ public class Ship : MonoBehaviour {
 
 	void Die()
 	{
+		GameObject.Find("Canvas").GetComponent<GameDisplay>().addPoint(score);
 		Destroy(gameObject);
 	}
 }

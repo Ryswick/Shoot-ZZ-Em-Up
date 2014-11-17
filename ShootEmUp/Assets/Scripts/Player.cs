@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Player : Ship {
-
+	
 	private int nbLife;
 	private int nbBomb;
 	private int shootDamage;
@@ -131,5 +131,25 @@ public class Player : Ship {
 		{
 			Die ();
 		}
+	}
+
+	public int getNbLife()
+	{
+		return nbLife;
+	}
+
+	public int getNbBomb()
+	{
+		return nbBomb;
+	}
+
+	public float getUpgradeRatio()
+	{
+		return upgradeRatio;
+	}
+
+	public List<Bonus> getBonusList()
+	{
+		return bonusList;
 	}
 }

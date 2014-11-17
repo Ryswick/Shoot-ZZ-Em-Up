@@ -8,9 +8,10 @@ public static class InfoJoueur{
 	private static int IDPlayer;
 	private static int IDSkin;
 	private static int IDBomb;
-	private static List<bool> achievements;
-	private static List<double> scores;
+	private static List<bool> achievements = new List<bool>();
+	private static List<long> scores = new List<long> {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	private static float[,] upgradeLevel = new float[5,2];
+	private static int actualLevel = 0;
 
 	public static string GetLogin()
 	{
@@ -42,12 +43,12 @@ public static class InfoJoueur{
 		return achievements[idAchievement];
 	}
 
-	public static List<double> GetScores()
+	public static List<long> GetScores()
 	{
 		return scores;
 	}
 
-	public static double GetScore(int idLevel)
+	public static long GetScore(int idLevel)
 	{
 		return scores[idLevel];
 	}
@@ -60,5 +61,10 @@ public static class InfoJoueur{
 			answer = upgradeLevel[level, type];
 
 		return answer;
+	}
+
+	public static int GetActualLevel()
+	{
+		return actualLevel;
 	}
 }
