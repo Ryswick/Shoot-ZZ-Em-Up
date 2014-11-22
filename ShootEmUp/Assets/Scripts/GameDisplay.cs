@@ -37,17 +37,10 @@ public class GameDisplay : MonoBehaviour {
 		upgradeRatio = player.getUpgradeRatio();
 		bonusList = player.getBonusList();
 
-		lifeTexture = (Sprite)Resources.Load("Heart", typeof(Sprite));
+		lifeTexture = (Sprite)Resources.Load("Sprites/Heart", typeof(Sprite));
 
-		/*for(int i = 0; i < player.getNbLife(); i++)
-		{
-			lifeDisplayed.Add(new GameObject());
-			lifeDisplayed[i].transform.position = new Vector3(0, i, 0);
-			lifeDisplayed[i].AddComponent("SpriteRenderer");
-			lifeDisplayed[i].GetComponent<SpriteRenderer>().sprite = lifeTexture;
-			lifeDisplayed[i].SetActive(true);
-			Instantiate(lifeDisplayed[i]);
-		}*/
+		lifeDisplayed = new List<GameObject>();
+		bombDisplayed = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
@@ -62,10 +55,41 @@ public class GameDisplay : MonoBehaviour {
 			textList[0].text = "Highscore " + score;
 			highscore = score;
 		}
-		//Affichage vie
+		if(lifeDisplayed.Count != player.getNbLife())
+		{
+			LifeDisplay();
+		}
+
 		//Affichage bombs
-		//Affichage ratio
+
+		if(upgradeRatio != player.getUpgradeRatio())
+		{
+			textList[4].text = "Upgrade " + upgradeRatio + " / 4.00";
+		}
+
 		//Affichage bonus
+
+	}
+
+	void LifeDisplay()
+	{
+		if(lifeDisplayed.Count < player.getNbLife())
+		{
+			for(int i = lifeDisplayed.Count; i < player.getNbLife(); i++)
+			{
+				lifeDisplayed.Add((GameObject)Instantiate(new GameObject(), new Vector3(4.5f+(i/3f), 1.43f, 0), new Quaternion()));
+				lifeDisplayed[i].AddComponent("SpriteRenderer");
+				lifeDisplayed[i].GetComponent<SpriteRenderer>().sprite = lifeTexture;
+			}
+		}
+		else
+		{
+			for(int i = lifeDisplayed.Count-1; i >= player.getNbLife();i--)
+			{
+				Destroy(lifeDisplayed[i]);
+				lifeDisplayed.RemoveAt(i);
+			}
+		}
 	}
 
 	public void addPoint(int points)
