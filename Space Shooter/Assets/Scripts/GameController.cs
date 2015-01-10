@@ -15,32 +15,27 @@ public class GameController : MonoBehaviour {
 	public GUIText gameOverText;
 
 	private bool gameOver;
-	private bool restart;
-	int score;
+	long score;
 
 	void Start ()
 	{
 		gameOver = false;
-		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
 		score = 0;
 		UpdateScore();
-		StartCoroutine(SpawnWaves());
+		//StartCoroutine(SpawnWaves());
 	}
 
 	void Update ()
 	{
-		if(restart)
+		if(gameOver && Input.GetKeyDown(KeyCode.R))
 		{
-			if(Input.GetKeyDown(KeyCode.R))
-			{
-				Application.LoadLevel(Application.loadedLevel);
-			}
+			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
 
-	IEnumerator SpawnWaves ()
+	/*IEnumerator SpawnWaves ()
 	{
 		yield return new WaitForSeconds (startWait);
 
@@ -48,7 +43,7 @@ public class GameController : MonoBehaviour {
 		{
 			for(int i = 0; i < hazardCount; i++)
 			{
-				Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x),spawnValues.y,spawnValues.z);
+				Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x),Random.Range (-1.5f, spawnValues.y),spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate(hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
@@ -56,10 +51,7 @@ public class GameController : MonoBehaviour {
 
 			yield return new WaitForSeconds (waveWait);
 		}
-
-		restartText.text = "Press 'R' for Restart";
-		restart = true;
-	}
+	}*/
 
 	public void AddScore(int newScoreValue)
 	{
@@ -74,7 +66,9 @@ public class GameController : MonoBehaviour {
 
 	public void GameOver ()
 	{
+		// Faire disparaitre le HUD de vie
 		gameOverText.text = "Game Over";
+		restartText.text = "Press 'R' for Restart";
 		gameOver = true;
 	}
 }
