@@ -3,55 +3,68 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
-	public GameObject hazard;
-	public Vector3 spawnValues;
-	public int hazardCount;
-	public float spawnWait;
-	public float startWait;
-	public float waveWait;
-
 	public GUIText scoreText;
+	public GUIText highScoreText;
+	public GUIText newHighScoreText;
 	public GUIText restartText;
+	public GUIText quitText;
 	public GUIText gameOverText;
+	
+	bool gameEnded;
 
-	private bool gameOver;
+	int selectedChoice;
+
 	long score;
+	long highScore;
 
 	void Start ()
 	{
-		gameOver = false;
+		gameEnded = false;
 		restartText.text = "";
+		quitText.text = "";
 		gameOverText.text = "";
+		newHighScoreText.text = "";
+		selectedChoice = 0;
+		highScore = InfoJoueur.getHighScore();
 		score = 0;
 		UpdateScore();
-		//StartCoroutine(SpawnWaves());
+		UpdateHighScore();
 	}
 
 	void Update ()
 	{
-		if(gameOver && Input.GetKeyDown(KeyCode.R))
+		if(gameEnded)
 		{
-			Application.LoadLevel(Application.loadedLevel);
-		}
-	}
-
-	/*IEnumerator SpawnWaves ()
-	{
-		yield return new WaitForSeconds (startWait);
-
-		while(!gameOver)
-		{
-			for(int i = 0; i < hazardCount; i++)
+			if(Input.GetAxisRaw("Vertical") > 0 && selectedChoice != 0)
+				selectedChoice --;
+			else if (Input.GetAxisRaw("Vertical") < 0 && selectedChoice != 1)
+				selectedChoice ++;
+			
+			if(selectedChoice == 0 && restartText.fontStyle != FontStyle.Bold)
 			{
-				Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x),Random.Range (-1.5f, spawnValues.y),spawnValues.z);
-				Quaternion spawnRotation = Quaternion.identity;
-				Instantiate(hazard, spawnPosition, spawnRotation);
-				yield return new WaitForSeconds (spawnWait);
+				restartText.fontStyle = FontStyle.Bold;
+				quitText.fontStyle = FontStyle.Normal;
+			}
+			else if (selectedChoice == 1 && quitText.fontStyle != FontStyle.Bold)
+			{
+				quitText.fontStyle = FontStyle.Bold;
+				restartText.fontStyle = FontStyle.Normal;
 			}
 
-			yield return new WaitForSeconds (waveWait);
+			if(Input.GetButtonDown("Fire1"))
+			{
+				switch(selectedChoice)
+				{
+				case 0 : 
+					Application.LoadLevel(Application.loadedLevel);
+					break;
+				case 1 : 
+					//Application.LoadLevel(MainMenu);
+					break;
+				}
+			}
 		}
-	}*/
+	}
 
 	public void AddScore(int newScoreValue)
 	{
@@ -62,13 +75,35 @@ public class GameController : MonoBehaviour {
 	void UpdateScore ()
 	{
 		scoreText.text = "Score: " + score;
+		if(score > highScore)
+		{
+			highScore = score;
+			UpdateHighScore();
+		}
 	}
 
-	public void GameOver ()
+	void UpdateHighScore ()
 	{
-		// Faire disparaitre le HUD de vie
-		gameOverText.text = "Game Over";
-		restartText.text = "Press 'R' for Restart";
-		gameOver = true;
+		highScoreText.text = "HighScore: " + highScore;
+    }
+
+	public void GameFinished (string endText)
+	{
+		gameEnded = true;
+
+		gameOverText.text = endText;
+
+		if(InfoJoueur.updateHighScore(score))
+		{
+			newHighScoreText.text = "New HighScore !";
+		}
+
+		restartText.text = "Restart";
+		quitText.text = "Main Menu";
+	}
+
+	public bool isGameEnded()
+	{
+		return gameEnded;
 	}
 }

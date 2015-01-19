@@ -54,16 +54,16 @@
      <Compile Include="Assets\Scripts\HazardMovement.cs" />
      <Compile Include="Assets\Scripts\InfoJoueur.cs" />
      <Compile Include="Assets\Scripts\LifeManager.cs" />
+     <Compile Include="Assets\Scripts\Pauser.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Previous Project\AllyProjectile.cs" />
      <Compile Include="Assets\Scripts\Previous Project\Bombe.cs" />
      <Compile Include="Assets\Scripts\Previous Project\Bonus.cs" />
-     <Compile Include="Assets\Scripts\Previous Project\GameDisplay.cs" />
      <Compile Include="Assets\Scripts\Previous Project\MenuManager.cs" />
-     <Compile Include="Assets\Scripts\Previous Project\Player.cs" />
-     <Compile Include="Assets\Scripts\Previous Project\Ship.cs" />
      <Compile Include="Assets\Scripts\Previous Project\Starfield.cs" />
      <Compile Include="Assets\Scripts\RandomRotator.cs" />
+     <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
+     <None Include="Assets\Resources\Musics\Sci-Fi Music Pack\License.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>

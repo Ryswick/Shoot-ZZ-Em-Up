@@ -6,7 +6,9 @@ public class LifeManager : MonoBehaviour {
 	public int life;
 	public GameObject explosion;
 	public int scoreValue;
+	bool isDead;
 	GameController gameController;
+	HazardGenerator generator;
 
 	void Start ()
 	{
@@ -14,6 +16,7 @@ public class LifeManager : MonoBehaviour {
 		if(gameControllerObject != null)
 		{
 			gameController = gameControllerObject.GetComponent<GameController>();
+			generator = gameControllerObject.GetComponent<HazardGenerator>();
 		}
 		else
 		{
@@ -24,6 +27,8 @@ public class LifeManager : MonoBehaviour {
 		{
 			Debug.Log("Cannot find 'GameController' script");
 		}
+
+		isDead = false;
 	}
 	
 	void OnTriggerEnter(Collider other) {
@@ -38,9 +43,14 @@ public class LifeManager : MonoBehaviour {
 			}
 
 			// If the object do not have any more life or if there is a frontal contact
-			if(life <= 0 || other.tag == "Player" || other.tag == "Hazard")
+			if(!isDead && (life <= 0 || other.tag == "Player" || other.tag == "Hazard"))
 			{
-				gameController.AddScore(scoreValue);
+				if(other.tag != "Player")
+				{
+					gameController.AddScore(scoreValue);
+					generator.ennemyCount--;
+					isDead = true;
+				}
 
 				Destruct();
 			}
@@ -52,7 +62,7 @@ public class LifeManager : MonoBehaviour {
 
 		if(tag == "Player")
 		{
-			gameController.GameOver();
+			gameController.GameFinished("Defeat");
 		}
 
 		Destroy (gameObject);
